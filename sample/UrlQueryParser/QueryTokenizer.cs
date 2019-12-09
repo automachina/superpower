@@ -124,27 +124,27 @@ namespace UrlQueryParser
                     yield return searchResult;
                 }
                 else
-                if (GreaterThanOperatorToken(span) is Result<QueryToken> gtResult && gtResult.HasValue)
-                {
-                    span = gtResult.Remainder;
-                    yield return gtResult;
-                }
-                else
                 if (GreaterThanOrEqualToOperatorToken(span) is Result<QueryToken> gteResult && gteResult.HasValue)
                 {
                     span = gteResult.Remainder;
                     yield return gteResult;
                 }
                 else
-                if (LessThanOperatorToken(span) is Result<QueryToken> ltResult && ltResult.HasValue)
+                if (GreaterThanOperatorToken(span) is Result<QueryToken> gtResult && gtResult.HasValue)
                 {
-                    span = ltResult.Remainder;
-                    yield return ltResult;
+                    span = gtResult.Remainder;
+                    yield return gtResult;
                 }
                 else
                 if (LessThanOrEqualToOperatorToken(span) is Result<QueryToken> lteResult && lteResult.HasValue)
                 {
                     span = lteResult.Remainder;
+                    yield return lteResult;
+                }
+                else
+                if (LessThanOperatorToken(span) is Result<QueryToken> ltResult && ltResult.HasValue)
+                {
+                    span = ltResult.Remainder;
                     yield return ltResult;
                 }
                 else

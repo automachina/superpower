@@ -18,15 +18,22 @@ namespace UrlQueryParser.Expressions
             Values = values?.ToList();
         }
 
-        public override string ToString()
-        {
-            var values = Values?.Aggregate("", (acc, item) => string.IsNullOrEmpty(acc) ? acc = $"{item}" : $"{acc},{item}");
-            var op = typeof(Operator).GetField($"{Operator}")?.
+        public string OperatorToString() =>
+            typeof(Operator).GetField($"{Operator}")?.
                 CustomAttributes.
                 Where(a => a.AttributeType == typeof(DescriptionAttribute)).
                 SelectMany(des => des.ConstructorArguments).
-                Select(a => a.Value).FirstOrDefault();
-            return $"{{ {Field} {op} {values} }}";
+                Select(a => a.Value).SingleOrDefault()?.ToString();
+
+        public string ValuesToString() =>
+            Values?.Aggregate("", (acc, item) =>
+                string.IsNullOrEmpty(acc) ? acc = $"'{item}'" : $"{acc},'{item}'");
+
+        public override string ToString()
+        {
+            var values = ValuesToString();
+            var op = OperatorToString();
+            return $"{{ field: {Field}, operator: {op}, value: {values} }}";
         }
     }
 }

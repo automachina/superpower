@@ -126,11 +126,11 @@ namespace UrlQueryParser
                 Or(QueryEnd)
             select clause;
 
-        static TokenListParser<QueryToken, Query> Query { get; } =
+        static TokenListParser<QueryToken, QueryExpression> Query { get; } =
             from clauses in Clause.ManyDelimitedBy(Token.EqualTo(QueryToken.And)).AtEnd()
-            select new Query(clauses);
+            select new QueryExpression(clauses);
 
-        public static bool TryParse(string queryString, out Query query, out string error, out Position errorPosition)
+        public static bool TryParse(string queryString, out QueryExpression query, out string error, out Position errorPosition)
         {
             var tokens = new QueryTokenizer().TryTokenize(queryString);
             if (!tokens.HasValue)

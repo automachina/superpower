@@ -25,16 +25,19 @@ namespace UrlQueryParser.Expressions
                 Orders = orders?.ToList() ?? Enumerable.Repeat(SortOrder.Asending, fields.Length).ToList();
         }
 
+        public static string SortOrderToString(SortOrder sort) =>
+            typeof(SortOrder).GetField($"{sort}").
+                    CustomAttributes.
+                    Where(a => a.AttributeType == typeof(DescriptionAttribute)).
+                    SelectMany(d => d.ConstructorArguments).
+                    Select(a => a.Value).FirstOrDefault()?.ToString();
+
         public override string ToString()
         {
             var fields = Fields.Aggregate("", (acc, item) => string.IsNullOrEmpty(acc) ? acc = item : $"{acc},{item}");
             var orders = Orders.Aggregate("", (acc, item) =>
             {
-                var order = typeof(SortOrder).GetField($"{item}").
-                    CustomAttributes.
-                    Where(a => a.AttributeType == typeof(DescriptionAttribute)).
-                    SelectMany(d => d.ConstructorArguments).
-                    Select(a => a.Value).FirstOrDefault();
+                var order = SortOrderToString(item);
                 if (string.IsNullOrEmpty(acc))
                     return $"{order}";
 
