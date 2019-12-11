@@ -19,6 +19,8 @@ namespace UrlQueryParser.Expressions
         [Description("LIKE")]
         Like,
         [Description("IN")]
-        Includes
+        Includes,
+        [Description("BETWEEN")]
+        Between
     }
 }

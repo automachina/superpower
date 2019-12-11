@@ -8,7 +8,7 @@ namespace UrlQueryParser.Generators
 {
     public static class MySqlSqlGenerators
     {
-        public static string ToSql(this FilterCluase filter, string tableAlias)
+        public static string ToSql(this FilterClause filter, string tableAlias)
         {
             string toValue(FilterValue filterValue)
             {
@@ -53,7 +53,8 @@ namespace UrlQueryParser.Generators
         {
             if (string.IsNullOrEmpty(search.Term?.Trim())) return "";
             return fields.Aggregate("", (acc, item) =>
-                string.IsNullOrEmpty(acc) ? $"{tableAlias}.{item} LIKE '%{search.Term}%'" : $"{acc}\nAND {tableAlias}.{item} LIKE '%{search.Term}%'");
+                string.IsNullOrEmpty(acc) ? $"({tableAlias}.{item} LIKE '%{search.Term}%'" : $"{acc}\nOR {tableAlias}.{item} LIKE '%{search.Term}%'").
+                Append(')').ToString();
         }
 
     }

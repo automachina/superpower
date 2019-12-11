@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace UrlQueryParser.Expressions
 {
-    public class FilterCluase : Expression
+    public class FilterClause : Expression
     {
         public string Field { get; set; }
         public Operator Operator { get; set; }
         public IList<FilterValue> Values { get; set; }
 
-        public FilterCluase(string field, Operator @operator, params FilterValue[] values)
+        public FilterClause(string field, Operator @operator, params FilterValue[] values)
         {
             Field = field;
             Operator = @operator;

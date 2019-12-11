@@ -41,6 +41,8 @@ namespace UrlQueryParser
         Like,
         [Token(Category = "Operator", Example = "_in")]
         Includes,
+        [Token(Category = "Operator", Example = "_between")]
+        Between,
         [Token(Category = "Content")]
         Field,
         [Token(Category = "Content")]

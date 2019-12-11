@@ -58,7 +58,8 @@ namespace UrlQueryParser
                 Or(Token.EqualTo(QueryToken.LessThan).Value(Operator.LessThan)).
                 Or(Token.EqualTo(QueryToken.LessThanOrEqualTo).Value(Operator.LessThanOrEqualTo)).
                 Or(Token.EqualTo(QueryToken.Like).Value(Operator.Like)).
-                Or(Token.EqualTo(QueryToken.Includes).Value(Operator.Includes))
+                Or(Token.EqualTo(QueryToken.Includes).Value(Operator.Includes)).
+                Or(Token.EqualTo(QueryToken.Between).Value(Operator.Between))
             select op;
 
         static TokenListParser<QueryToken, object> QueryLimit { get; } =
@@ -79,8 +80,9 @@ namespace UrlQueryParser
             from field in QueryField
             from op in QueryOperator.OptionalOrDefault(Operator.Equals)
             from values in Token.EqualTo(QueryToken.Equals).IgnoreThen(QueryValue.
-                ManyDelimitedBy(Token.EqualTo(QueryToken.Comma)))
-            select (Expression)new FilterCluase(field, op, values);
+                ManyDelimitedBy(Token.EqualTo(QueryToken.Comma)).Where(v =>
+                op == Operator.Between ? v.Length == 2 : op == Operator.Includes ? v.Length >= 1 : v.Length == 1))
+            select (Expression)new FilterClause(field, op, values);
 
         static TokenListParser<QueryToken, SortOrder[]> QuerySortOrders { get; } =
             from _ in Token.EqualTo(QueryToken.Order)

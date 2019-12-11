@@ -37,6 +37,7 @@ namespace UrlQueryParser
         static TextParser<QueryToken> NotEqualToOperatorToken { get; } = CreateKeywordToken("ne", QueryToken.NotEqual);
         static TextParser<QueryToken> LikeOperatorToken { get; } = CreateKeywordToken("like", QueryToken.Like);
         static TextParser<QueryToken> IncludesOperatorToken { get; } = CreateKeywordToken("in", QueryToken.Includes);
+        static TextParser<QueryToken> BetweenOperatorToken { get; } = CreateKeywordToken("between", QueryToken.Between);
 
         static TextParser<QueryToken> StringValueToken { get; } =
             from _ in Character.ExceptIn('&', '=', ',').Many().Try()
@@ -164,6 +165,12 @@ namespace UrlQueryParser
                 {
                     span = inResult.Remainder;
                     yield return inResult;
+                }
+                else
+                if (BetweenOperatorToken(span) is Result<QueryToken> betweenResult && betweenResult.HasValue)
+                {
+                    span = betweenResult.Remainder;
+                    yield return betweenResult;
                 }
                 else
                 if ((!state.Previous.HasValue || state.Previous.Value.Kind == QueryToken.And) && FieldToken(span) is Result<QueryToken> fieldResult && fieldResult.HasValue)

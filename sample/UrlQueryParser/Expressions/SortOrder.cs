@@ -4,9 +4,9 @@ namespace UrlQueryParser.Expressions
 {
     public enum SortOrder
     {
-        [Description("asc")]
+        [Description("ASC")]
         Asending,
-        [Description("desc")]
+        [Description("DESC")]
         Descending
     }
 }

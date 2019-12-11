@@ -25,12 +25,12 @@ namespace UrlQueryParser.Generators
         {
             sqlBuilder = new StringBuilder($"SELECT * FROM\n({sql}) AS A\n");
 
-            if (query.QueryClauses.Where(c => c is FilterCluase) is IEnumerable<Expression> filters)
+            if (query.QueryClauses.Where(c => c is FilterClause) is IEnumerable<Expression> filters)
             {
                 sqlBuilder.Append($"WHERE ");
                 whereClauseSet = true;
                 var first = true;
-                foreach (var filter in filters.Cast<FilterCluase>())
+                foreach (var filter in filters.Cast<FilterClause>())
                 {
                     if (first)
                     {
